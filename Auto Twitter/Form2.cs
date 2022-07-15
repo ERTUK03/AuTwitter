@@ -114,24 +114,16 @@ namespace Auto_Twitter
         {
             if (command.image == "")
             {
-                service.SendTweet(new SendTweetOptions { Status = command.content }, (tweet,response) =>
-                {
-                    if(response.StatusCode != HttpStatusCode.OK)
-                    {
-                        MessageBox.Show(response.Error.Message);
-                    }
-                    SQLite_Data_Access.DeleteCommand(command.name);
-                });
-                
+                service.SendTweet(new SendTweetOptions { Status = command.content });
             }
             else
             {
                 using (var stream = new FileStream(command.image, FileMode.Open))
                 {
                     service.SendTweetWithMedia(new SendTweetWithMediaOptions { Status = command.content, Images = new Dictionary<string, Stream> { { command.image, stream } } });
-                    SQLite_Data_Access.DeleteCommand(command.name);
                 }
             }
+            SQLite_Data_Access.DeleteCommand(command.name);
         }
     }
 }
